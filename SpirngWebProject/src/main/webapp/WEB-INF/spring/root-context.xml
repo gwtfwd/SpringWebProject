@@ -32,5 +32,11 @@
     <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
 </bean>
 <mybatis-spring:scan base-package="kr.green.springwebproject.dao"/>	
+
+<bean id="boardMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="kr.green.springwebproject.dao.BoardMapper"></property>
+    <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+</bean>
+<mybatis-spring:scan base-package="kr.green.springwebproject.dao"/>	
 		
 </beans>
