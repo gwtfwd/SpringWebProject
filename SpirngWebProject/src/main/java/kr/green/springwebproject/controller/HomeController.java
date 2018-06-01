@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import kr.green.springwebproject.dao.User;
 import kr.green.springwebproject.dao.UserMapper;
 
 
@@ -36,9 +37,9 @@ public class HomeController {
 		String id = request.getParameter("id");
 		String pw = request.getParameter("pw");
 		
-		email = userMapper.getEmail(id);
+		User user = userMapper.login(id, pw);
 		
-		System.out.println(email);
+		System.out.println(user);
 		
 		return "home";
 	}
