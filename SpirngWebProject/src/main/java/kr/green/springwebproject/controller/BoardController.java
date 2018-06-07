@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 
+@RequestMapping(value="/board/*")
+
 public class BoardController {
 	
 	@RequestMapping(value = "/board/list", method = RequestMethod.GET)
