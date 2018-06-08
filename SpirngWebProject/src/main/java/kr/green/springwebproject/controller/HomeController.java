@@ -1,8 +1,6 @@
 package kr.green.springwebproject.controller;
 
 
-import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -13,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import kr.green.springwebproject.dao.Board;
 import kr.green.springwebproject.dao.BoardMapper;
 import kr.green.springwebproject.dao.User;
 import kr.green.springwebproject.dao.UserMapper;
@@ -41,15 +38,12 @@ public class HomeController {
 		
 		String id = request.getParameter("id");
 		String pw = request.getParameter("pw");
-		
 		User user = userMapper.login(id, pw);
 		
-		System.out.println(user);
-		
-		ArrayList<Board> list = (ArrayList)boardMapper.getBoard();
-		System.out.println("게시판리스트");
-		for(Board tmp : list) {
-			System.out.println(tmp);
+		if(user != null) {
+			model.addAttribute("user",user);
+			return "redirect:/board/list";
+			
 		}
 		
 		return "home";
