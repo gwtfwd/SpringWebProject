@@ -9,4 +9,22 @@
 		select * from account where id = #{id} and pw = #{pw}
 	</select>
 
+	<select id="getUser" resultType="kr.green.springwebproject.dao.User">
+		select * from account where id=#{id}
+	</select>
+
+	<!-- UserMapper.java에서 @Param을 안쓰면 user.id로 안쓰고 id로 씀 -->
+	<insert id="join" >
+		insert into account (id, pw, email) values (#{id}, #{pw}, #{email})
+	</insert>
+
+	<select id="loginById" resultType="kr.green.springwebproject.dao.User">
+		select * from account where id=#{id}
+	</select>
+	
+	<update id="updateUser">
+		update account set pw=#{pw}, email=#{email} where id=#{id}
+	</update>
+	
+
 </mapper>

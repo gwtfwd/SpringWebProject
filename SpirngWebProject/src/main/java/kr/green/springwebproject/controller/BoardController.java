@@ -16,6 +16,8 @@ import kr.green.springwebproject.dao.Board;
 import kr.green.springwebproject.dao.BoardMapper;
 import kr.green.springwebproject.dao.User;
 import kr.green.springwebproject.dao.UserMapper;
+import kr.green.springwebproject.pagenation.Criteria;
+import kr.green.springwebproject.pagenation.PageMaker;
 
 
 @Controller
@@ -28,12 +30,51 @@ public class BoardController {
 	BoardMapper boardMapper;
 	
 	
-	@RequestMapping(value = "list", method = RequestMethod.GET)
-	public String boardListGet(Model model) {
+	@RequestMapping(value = "list")
+	public String boardListGet(Model model, Criteria cri, String search, Integer type) {
 		
-		ArrayList<Board> list = (ArrayList)boardMapper.getBoard();
+		System.out.println("Search: "+ search);
+		System.out.println("Type : "+ type);
 		
+		//Criteria cri = new Criteria(1,10);
+		
+		if(cri == null) {
+			cri = new Criteria();
+		}
+		
+		int totalCount=0;
+		PageMaker pageMaker = new PageMaker();
+		ArrayList<Board> list;
+		pageMaker.setCriteria(cri);
+		
+		if( type == null ) {
+			type = 0;
+		}
+		if( type == 0 ) {
+			totalCount = boardMapper.getCountBoard();
+			list = (ArrayList)boardMapper.getListPage(cri);
+		}
+		else if( type == 1 ) {
+			totalCount = boardMapper.getCountBoardByTitle("%"+search+"%");
+			list = (ArrayList)boardMapper.getListPageByTitle(cri, "%"+search+"%");
+		}
+		else if( type == 2 ) {
+			totalCount = boardMapper.getCountBoardByAuthor("%"+search+"%");
+			list = (ArrayList)boardMapper.getListPageByAuthor(cri, "%"+search+"%");
+		}
+		else {
+			totalCount = boardMapper.getCountBoardByContents("%"+search+"%");
+			list = (ArrayList)boardMapper.getListPageByContents(cri, "%"+search+"%");
+		}
+		
+		//ArrayList<Board> list = (ArrayList)boardMapper.getBoard();
+		
+		pageMaker.setTotalCount(totalCount);
 		model.addAttribute("list",list);
+		model.addAttribute("pageMaker", pageMaker);
+		model.addAttribute("search", search);
+		model.addAttribute("type", type);
+		System.out.println(pageMaker);
 		
 		return "/board/list";
 	}

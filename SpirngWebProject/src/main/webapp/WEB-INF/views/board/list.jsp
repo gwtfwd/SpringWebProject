@@ -15,14 +15,33 @@
 	<title>Insert title here</title>
 </head>
 <body>
-	<div class="container">
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<div class="container">
+				<div class="col-12">
+					<form class="form-inline" style="display:inline-block;">
+					  <select class="form-control" name="type" >
+					    <option value="0" <c:out value="${type==0? 'selected':''}"/>>선택</option>
+					    <option value="1" <c:out value="${type==1? 'selected':''}"/>>제목</option>
+					    <option value="2" <c:out value="${type==2? 'selected':''}"/>>저자</option>
+					    <option value="3" <c:out value="${type==3? 'selected':''}"/>>내용</option>
+					  </select>
+					    <input class="form-control mr-sm-2" type="text" placeholder="Search" value="${search }" name="search">
+					    <button class="btn btn-success" type="submit">Search</button>
+			  		</form>
+			 	 </div>
+			</div>
+		</nav>
+	<div class="container">	
 		<div class="row"> 
-			<h3>게시판</h3>
+			<h3>게시판</h3><br><br>
 		</div>
 		<div>
 			<a href="/board/write" >
-			  	<button class="btn btn-primary"> 글쓰기 </button>
+			  	<button class="btn btn-primary" > 글쓰기 </button>
 		 	</a>
+			<a href="/member/logout" style="float:right;">로그아웃 </a>
+		 	<span style="float:right;"> | </span>
+			<a href="/member/update" style="float:right;">회원정보수정</a>
 		</div>
 		<div> 	
 			<table class="table table-dark table-striped">
@@ -44,8 +63,18 @@
 			        </c:forEach>
 			    </tbody>
 			  </table>
+			  <ul class="pagination" style="justify-content:center;">
+				  <c:if test="${pageMaker.prev }">
+					<li class="page-item"><a class="page-link" href="/board/list?page=${pageMaker.startPage-1}">Prev</a></li>
+				  </c:if>
+				  <c:forEach var="page" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
+				  	<li class="page-item"><a class="page-link" href="/board/list?page=${page }">${page }</a></li>
+				  </c:forEach>
+				  <c:if test="${pageMaker.next }">
+				  	<li class="page-item"><a class="page-link" href="/board/list?page=${pageMaker.endPage+1}">Next</a></li>
+			   	  </c:if>	
+			   </ul>
 		  </div> 
 	</div>
-	
 </body>
 </html>

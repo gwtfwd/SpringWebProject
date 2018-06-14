@@ -26,6 +26,7 @@
 	
 	<beans:bean id="loginInterceptor" class="kr.green.springwebproject.interceptor.LoginInterceptor"></beans:bean>
 	<beans:bean id="authInterceptor" class="kr.green.springwebproject.interceptor.AuthInterceptor"></beans:bean>
+	<beans:bean id="unAuthInterceptor" class="kr.green.springwebproject.interceptor.UnAuthInterceptor"></beans:bean>
 	
 	<interceptors>
 		<interceptor>
@@ -34,7 +35,12 @@
 		</interceptor>
 		<interceptor>
 			<mapping path="/board/*"/>
+			<mapping path="/member/update"/>
 			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/member/join"/>
+			<beans:ref bean="unAuthInterceptor"/>
 		</interceptor>
 	</interceptors>
 	

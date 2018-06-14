@@ -8,11 +8,11 @@ public interface UserMapper {
 
 	public User login(@Param("id") String id, @Param("pw") String pw);
 	
+	public void join(User user);
 	
+	public User loginById(@Param("id") String id);
 	
-	
-	
-	
+	public void updateUser(User user);
 	
 	
 	
