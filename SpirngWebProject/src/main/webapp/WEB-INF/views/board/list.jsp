@@ -65,13 +65,13 @@
 			  </table>
 			  <ul class="pagination" style="justify-content:center;">
 				  <c:if test="${pageMaker.prev }">
-					<li class="page-item"><a class="page-link" href="/board/list?page=${pageMaker.startPage-1}">Prev</a></li>
+					<li class="page-item"><a class="page-link" href="/board/list?page=${pageMaker.startPage-1}&search=${search}&type=${type}">Prev</a></li>
 				  </c:if>
 				  <c:forEach var="page" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
-				  	<li class="page-item"><a class="page-link" href="/board/list?page=${page }">${page }</a></li>
+				  	<li class="page-item"><a class="page-link" href="/board/list?page=${page }&search=${search}&type=${type}">${page }</a></li>
 				  </c:forEach>
 				  <c:if test="${pageMaker.next }">
-				  	<li class="page-item"><a class="page-link" href="/board/list?page=${pageMaker.endPage+1}">Next</a></li>
+				  	<li class="page-item"><a class="page-link" href="/board/list?page=${pageMaker.endPage+1}&search=${search}&type=${type}">Next</a></li>
 			   	  </c:if>	
 			   </ul>
 		  </div> 

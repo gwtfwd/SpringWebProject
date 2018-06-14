@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
-
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -48,11 +47,16 @@
             </div>
             <div class="offset-2 col-8">
                <a href="/board/list"> 
-               <button type="button" class="btn btn-primary">목록</button>
+               		<button type="button" class="btn btn-primary">목록</button>
                </a>
+               
+               <c:if test="${isAuthor }">
                <a href="/board/modify?number=${board.number }">
-               <button type="button" class="btn btn-primary">수정</button>
+               		<button type="button" class="btn btn-primary">수정</button>
             	</a>
+            	</c:if>
+            	
+            	
             </div>
          </div>
       </form>

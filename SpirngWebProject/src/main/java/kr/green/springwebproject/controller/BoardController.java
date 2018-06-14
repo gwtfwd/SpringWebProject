@@ -86,9 +86,26 @@ public class BoardController {
 		
 		Board board = boardMapper.getBoardByNumber(number);
 		
+		
+		HttpSession session = request.getSession();
+		User user = (User)session.getAttribute("user");
+		
+		
 		model.addAttribute("board", board);
 		
+		model.addAttribute("user", user);
+		
 		/*System.out.println(boardMapper.getBoardByNumber(number));*/
+		
+		boolean isAuthor = false;
+		
+		if(user.getId().compareTo(board.getAuthor())==0) {		// 유저의 id와 게시글의 저자가 같으면
+			isAuthor = true;
+		}else {
+			isAuthor = false;
+		}
+		
+		model.addAttribute("isAuthor",isAuthor);
 		
 		return "/board/detail";
 	}
