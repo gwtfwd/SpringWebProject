@@ -9,8 +9,22 @@ public class Board {
 	private String title;
 	private String author;
 	private String contents;
+	private String admin;
+	private String disable = "false";
 	
 	
+	public String getAdmin() {
+		return admin;
+	}
+	public void setAdmin(String admin) {
+		this.admin = admin;
+	}
+	public String getDisable() {
+		return disable;
+	}
+	public void setDisable(String disable) {
+		this.disable = disable;
+	}
 	public Integer getNumber() {
 		return number;
 	}

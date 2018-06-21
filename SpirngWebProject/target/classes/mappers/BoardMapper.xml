@@ -6,11 +6,11 @@
 <mapper namespace="kr.green.springwebproject.dao.BoardMapper">
   
     <select id="getBoard" resultType="kr.green.springwebproject.dao.Board">
-		select * from board 
+		select * from board where disable = 'false'
 	</select>
 	
 	<select id="getBoardByNumber" resultType="kr.green.springwebproject.dao.Board">
-		select * from board where number=#{number} 
+		select * from board where number=#{number} and disable = 'false'
 	</select>
 	
 	<update id="modifyBoard">
@@ -22,12 +22,12 @@
 	</insert>
 
 	<select id="getListPage" resultType="kr.green.springwebproject.dao.Board">
-		select * from board order by number desc limit #{cri.pageStart}, #{cri.perPageNum}
+		select * from board where disable = 'false' order by number desc limit #{cri.pageStart}, #{cri.perPageNum} 
 	</select>
 	
 	<!-- getCountBoard가 int이므로 integer클래스를 resultType으로 -->
 	<select id="getCountBoard" resultType="java.lang.Integer">
-		select count(number) from board
+		select count(number) from board where disable = 'false'
 	</select>
 	
 	<!-- 제목검색 -->
@@ -56,7 +56,33 @@
 	<select id="getCountBoardByContents" resultType="java.lang.Integer">
 		select count(number) from board where contents like #{search} 
 	</select> 
+	
+	<!-- 관리자 페이지 수정 -->
+	<update id="updateBoardDisable">
+		update 
+			board 
+		set 
+			disable = #{board.disable}
+		where 
+			number = #{board.number}
+	</update>
 
+	<!-- 관리자페이지 리스트 -->
+	<select id="getBoardAll" resultType="kr.green.springwebproject.dao.Board">
+		select 
+			* 
+		from 
+			board 
+	</select>
+	
+	<select id="getListPageByAdmin" resultType="kr.green.springwebproject.dao.Board">
+		select * from board order by number desc limit #{cri.pageStart}, #{cri.perPageNum} 
+	</select>
+	
+	<select id="getCountBoardByAdmin" resultType="java.lang.Integer">
+		select count(number) from board
+	</select>
+	
 </mapper>
 
 

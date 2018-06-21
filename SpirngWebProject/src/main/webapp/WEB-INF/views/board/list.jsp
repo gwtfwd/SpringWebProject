@@ -39,6 +39,11 @@
 			<a href="/board/write" >
 			  	<button class="btn btn-primary" > 글쓰기 </button>
 		 	</a>
+		 	
+		 	<c:if test="${admin}">
+				<h6 style="display: inline-flex;"><a href="/admin/main" style=" float:right;">관리자페이지</a></h6>
+			</c:if>	
+			<span style="float:right;"> | </span>
 			<a href="/member/logout" style="float:right;">로그아웃 </a>
 		 	<span style="float:right;"> | </span>
 			<a href="/member/update" style="float:right;">회원정보수정</a>

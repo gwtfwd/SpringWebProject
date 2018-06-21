@@ -8,9 +8,18 @@ public class User {
 	private String id;
 	private String pw;
 	private String email;
+	private String admin;				// 관리자인지 사용자인지 구별하는 변수추가
 	
 	
-	// 멤버변수에 접근하기 위한 getter와 setter
+	// 멤버변수에 접근하기 위한 getter와 setter	
+	
+	public String getAdmin() {
+		return admin;
+	}
+	public void setAdmin(String admin) {
+		this.admin = admin;
+	}
+	
 	public String getId() {
 		return id;
 	}

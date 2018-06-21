@@ -31,7 +31,7 @@ public class BoardController {
 	
 	
 	@RequestMapping(value = "list")
-	public String boardListGet(Model model, Criteria cri, String search, Integer type) {
+	public String boardListGet(Model model, Criteria cri, String search, Integer type, HttpServletRequest request) {
 		
 		System.out.println("Search: "+ search);
 		System.out.println("Type : "+ type);
@@ -75,6 +75,15 @@ public class BoardController {
 		model.addAttribute("search", search);
 		model.addAttribute("type", type);
 		System.out.println(pageMaker);
+		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+			
+		boolean admin = false;
+			
+		if(user.getAdmin().compareTo("admin") == 0)
+			admin = true;
+		model.addAttribute("admin", admin);
 		
 		return "/board/list";
 	}

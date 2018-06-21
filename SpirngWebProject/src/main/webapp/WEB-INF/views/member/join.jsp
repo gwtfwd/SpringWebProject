@@ -17,13 +17,93 @@
 	JOIN  
 </h1>
 
-	<form method="post">
-		<label>ID : </label><input type="text" name="id" autocomplete=off/><br>
-		<label>PW : </label><input type="password" name="pw" autocomplete=off/><br>
-		<label>email : </label><input type="email" name="email" autocomplete=off/>
+	<form method="post" id="formId">
+		<label>ID : </label><input type="text" id="usr" name="id" autocomplete="off" onchange="validationId(this)"/><br>
+			<div style="color:red; display:none;" id="inforId">
+				아이디는 영문자와 숫자로 이루어져 있으며, 5~10자 이어야 합니다.
+			</div>
+		<label>PW : </label><input type="password" id="pwd" name="pw" onchange="validationPw(this)"/><br>
+			<div style="color:red; display:none;" id="inforPw">
+				비밀번호는 영문자와 숫자가 1개이상 포함되어 있어야 하며, 8~20자 이어야 합니다.
+			</div>
+		<label>email : </label><input type="email" name="email" autocomplete="off"/>
 		<input type="submit" value="OK"/>
 	
 	</form>
 
+	<script >
+		function validationId(id){
+			
+			var inforId = document.getElementById('inforId');
+			var idText = id.value;
+			var idRegex = /^\w{5,10}$/;
+			inforId.style.display = 'none';
+
+			if (idText != null && idRegex.test(idText)){
+				return true;
+			}
+			else {
+				inforId.style.display = 'block';
+				return false;
+			}
+		}
+		
+		function validationPw(pw){
+			
+			var inforPw = document.getElementById('inforPw');
+			var pwText = pw.value;
+			var pwRegex = /^(?=\w{8,20})(\w*((\d[a-zA-Z])|([a-zA-Z]\d))\w*)$/;
+			inforPw.style.display = 'none';
+			
+			if (pwText != null && pwRegex.test(pwText)){
+				return true;
+			}
+			else {
+				inforPw.style.display = 'block';
+				return false;
+			}
+		}
+	
+		var formId = document.getElementById('formId');
+		formId.onsubmit = function(){
+			
+			var id = document.getElementById('usr');
+			var pw = document.getElementById('pwd');
+			var isOK = true;	// 제출을 할건지 말건지 결정하는 변수
+			
+			if (!validationId(id)){
+				isOK = false;
+			}
+
+			if (!validationPw(pw)){
+				isOK = false;
+			}
+			if(!isOK){
+				return false;
+			}
+			return true;
+			
+		}
+		
+		
+		
+	</script>
+
+
+
+
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+

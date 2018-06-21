@@ -43,6 +43,12 @@ public interface BoardMapper {
 	public Integer getCountBoardByContents(@Param("search") String search);
 	public List<Board> getListPageByContents(@Param("cri") Criteria cri, @Param("search") String search);
 	
+	public void updateBoardDisable(@Param("board") Board board);
+	public List<Board> getBoardAll();
+	
+	public List<Board> getListPageByAdmin(@Param("cri") Criteria cri);
+	
+	public int getCountBoardByAdmin();
 	
 }
 

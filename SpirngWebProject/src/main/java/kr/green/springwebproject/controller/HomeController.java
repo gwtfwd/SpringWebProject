@@ -78,9 +78,11 @@ public class HomeController {
 			String encPw = passwordEncoder.encode(user.getPw());
 			user.setPw(encPw);
 			userMapper.join(user);
+			user.setAdmin("user");
 			return "redirect:/";
 		}
 	}
+	
 	
 	@RequestMapping(value = "/member/logout")
 	public String logout(HttpServletRequest request) {
