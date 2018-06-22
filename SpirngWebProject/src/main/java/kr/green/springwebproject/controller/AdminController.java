@@ -39,6 +39,7 @@ public class AdminController {
 		
 		int totalCount=0;
 		
+		
 		ArrayList<Board> list = null;
 		
 		totalCount = boardMapper.getCountBoardByAdmin();
@@ -52,6 +53,15 @@ public class AdminController {
 		   보낼 때 이름을 list로 하면 편함 */
 		model.addAttribute("list",list);
 		model.addAttribute("pageMaker", pageMaker);
+		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		
+		boolean admin = false;
+		
+		if(user.getAdmin().compareTo("user") !=0)
+			admin = true;
+		model.addAttribute("admin", admin);
 		
 		return "admin/board";
 	}
@@ -112,7 +122,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/user/set")
-	public String adminUserSet(Model model, String admin, Integer page, String id) throws Exception {
+	public String superadminUserSet(Model model, String admin, Integer page, String id) throws Exception {
 		
 		User user = userMapper.loginById(id);
 		user.setAdmin(admin);

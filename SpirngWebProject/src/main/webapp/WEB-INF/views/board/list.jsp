@@ -39,7 +39,7 @@
 			<a href="/board/write" >
 			  	<button class="btn btn-primary" > 글쓰기 </button>
 		 	</a>
-		 	
+
 		 	<c:if test="${admin}">
 				<h6 style="display: inline-flex;"><a href="/admin/board" style=" float:right;">관리자페이지</a></h6>
 				<span > | </span>

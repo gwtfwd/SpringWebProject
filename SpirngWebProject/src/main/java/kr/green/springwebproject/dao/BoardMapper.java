@@ -51,7 +51,7 @@ public interface BoardMapper {
 	
 	public int getCountBoardByAdmin();
 	
-	////////////////////////////////////////////////////////
+	////내가쓴글////////////////////////////////////////////////////
 	
 	public int getCountBoardMyList(@Param("user") User user);
 	public List<Board> getMyListPage(@Param("cri") Criteria cri,@Param("user") User user);

@@ -18,8 +18,8 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
 		User user = (User) session.getAttribute("user");		
 		
 		// user.getAdmin() : 문자열
-		// 비교할 대상 : 문자열(ADMIN)
-		if(user == null || user.getAdmin().compareTo("admin") != 0) {
+		// 비교할 대상 : 문자열(admin)
+		if(user == null || user.getAdmin().compareTo("user") == 0) {
 			response.sendRedirect("/");	
 			return false;
 		}

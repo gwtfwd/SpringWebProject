@@ -19,13 +19,19 @@
 		<div class="row "> 
 			<h3 class="offset-2 col-8">게시판 글쓰기</h3>
 		</div>
-		<form method="post">
+		<form method="post" enctype="multipart/form-data">
 			<div class="row">		
 				<div class="offset-2 col-8">
 					<div class="form-group" >
 			  			<label for="usr">제목:</label>
 			  			<input type="text" class="form-control" id="usr" name="title">
 					</div>
+				</div>
+				<div class="offset-2 col-8">
+					<div class="form-group">
+				        <label>파일</label>
+				        <input type="file" class="form-control" name="file"/>
+				    </div>
 				</div>
 				<div class="offset-2 col-8">
 					<div class="form-group">

@@ -1,16 +1,29 @@
 package kr.green.springwebproject.controller;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.UUID;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.green.springwebproject.dao.Board;
 import kr.green.springwebproject.dao.BoardMapper;
@@ -18,16 +31,22 @@ import kr.green.springwebproject.dao.User;
 import kr.green.springwebproject.dao.UserMapper;
 import kr.green.springwebproject.pagenation.Criteria;
 import kr.green.springwebproject.pagenation.PageMaker;
+import kr.green.springwebproject.utils.UploadFileUtils;
 
 
 @Controller
 
 @RequestMapping(value="/board/*")
 
+
+
 public class BoardController {
 	
 	@Autowired
 	BoardMapper boardMapper;
+	
+	@Resource
+	private String uploadPath;
 	
 	
 	@RequestMapping(value = "list")
@@ -81,7 +100,7 @@ public class BoardController {
 			
 		boolean admin = false;
 			
-		if(user.getAdmin().compareTo("admin") == 0)
+		if(user.getAdmin().compareTo("user") !=0)
 			admin = true;
 		model.addAttribute("admin", admin);
 		
@@ -146,7 +165,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "write", method = RequestMethod.POST)
-	public String boardWritePost(HttpServletRequest request, Model model, Board board) {
+	public String boardWritePost(HttpServletRequest request, Model model, Board board, MultipartFile file) throws Exception {
 		
 		HttpSession session = request.getSession();
 		
@@ -156,7 +175,46 @@ public class BoardController {
 		
 		boardMapper.insertBoard(board);
 		
+		UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(),file.getBytes());
+		
 		return "redirect:/board/list";
+	}
+	
+	/* 서버에 저장 */
+	private String uploadFile(String name, byte[] data) throws Exception{
+
+	    /* 고유한 파일명을 위해 UUID를 이용 */
+		UUID uid = UUID.randomUUID();
+		String savaName = uid.toString() + "_" + name;
+		File target = new File(uploadPath, savaName);
+		FileCopyUtils.copy(data, target);
+		return savaName;
+	}
+	
+	@ResponseBody
+	@RequestMapping("download")
+	public ResponseEntity<byte[]> downloadFile(String fileName)throws Exception{
+		
+	    InputStream in = null;
+	    ResponseEntity<byte[]> entity = null;
+	    
+	    try{
+	        String FormatName = fileName.substring(fileName.lastIndexOf(".")+1);
+	        HttpHeaders headers = new HttpHeaders();
+	        in = new FileInputStream(uploadPath+fileName);
+
+	        fileName = fileName.substring(fileName.indexOf("_")+1);
+	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	        headers.add("Content-Disposition",  "attachment; filename=\"" 
+				+ new String(fileName.getBytes("UTF-8"), "ISO-8859-1")+"\"");
+	        entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in),headers,HttpStatus.CREATED);
+	    }catch(Exception e) {
+	        e.printStackTrace();
+	        entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+	    }finally {
+	        in.close();
+	    }
+	    return entity;
 	}
 	
 	
