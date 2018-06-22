@@ -10,7 +10,7 @@
 	</select>
 	
 	<select id="getBoardByNumber" resultType="kr.green.springwebproject.dao.Board">
-		select * from board where number=#{number} and disable = 'false'
+		select * from board where number=#{number} 
 	</select>
 	
 	<update id="modifyBoard">
@@ -18,7 +18,7 @@
 	</update>
 	
 	<insert id="insertBoard">
-		insert into board (title, contents, author) values (#{board.title}, #{board.contents},#{board.author})
+		insert into board (title, contents, author, disable) values (#{board.title}, #{board.contents},#{board.author}, 'false')
 	</insert>
 
 	<select id="getListPage" resultType="kr.green.springwebproject.dao.Board">
@@ -82,6 +82,46 @@
 	<select id="getCountBoardByAdmin" resultType="java.lang.Integer">
 		select count(number) from board
 	</select>
+	
+	
+	
+	 <!-- 내가쓴글 -->
+	
+	<select id="getCountBoardMyList" resultType="java.lang.Integer">
+		select count(number) from board where disable = 'false' and author = #{user.id}
+	</select>
+	
+	<select id="getMyListPage" resultType="kr.green.springwebproject.dao.Board">
+		select * from board where disable = 'false' and author = #{user.id} order by number desc limit #{cri.pageStart}, #{cri.perPageNum} 
+	</select>
+	
+	
+	<!-- 제목검색 -->
+	<select id="getMyListPageByTitle" resultType="kr.green.springwebproject.dao.Board">
+		select * from board where title like #{search} and author = #{user.id} order by number desc limit #{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	
+	<select id="getCountBoardMyListByTitle" resultType="java.lang.Integer">
+		select count(number) from board where title like #{search} and author = #{user.id}
+	</select> 
+	
+	<!-- 저자검색 -->
+	<select id="getMyListPageByAuthor" resultType="kr.green.springwebproject.dao.Board">
+		select * from board where author like #{search} and author = #{user.id} order by number desc limit #{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	
+	<select id="getCountBoardMyListByAuthor" resultType="java.lang.Integer">
+		select count(number) from board where author like #{search} and author = #{user.id}
+	</select> 
+	
+	<!-- 내용검색 -->
+	<select id="getMyListPageByContents" resultType="kr.green.springwebproject.dao.Board">
+		select * from board where contents like #{search} and author = #{user.id} order by number desc limit #{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	
+	<select id="getCountBoardMyListByContents" resultType="java.lang.Integer">
+		select count(number) from board where contents like #{search} and author = #{user.id}
+	</select>  
 	
 </mapper>
 

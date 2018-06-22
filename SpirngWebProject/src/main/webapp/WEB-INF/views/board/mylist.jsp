@@ -44,7 +44,7 @@
 				<h6 style="display: inline-flex;"><a href="/admin/board" style=" float:right;">관리자페이지</a></h6>
 				<span > | </span>
 			</c:if>	
-			<a href="/board/mylist" >내가쓴글 </a>
+			<a href="/board/list" >게시판페이지</a>
 
 			<a href="/member/logout" style="float:right;">로그아웃 </a>
 		 	<span style="float:right;"> | </span>
@@ -72,13 +72,13 @@
 			  </table>
 			  <ul class="pagination" style="justify-content:center;">
 				  <c:if test="${pageMaker.prev }">
-					<li class="page-item"><a class="page-link" href="/board/list?page=${pageMaker.startPage-1}&search=${search}&type=${type}">Prev</a></li>
+					<li class="page-item"><a class="page-link" href="/board/mylist?page=${pageMaker.startPage-1}&search=${search}&type=${type}">Prev</a></li>
 				  </c:if>
 				  <c:forEach var="page" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
-				  	<li class="page-item"><a class="page-link" href="/board/list?page=${page }&search=${search}&type=${type}">${page }</a></li>
+				  	<li class="page-item"><a class="page-link" href="/board/mylist?page=${page }&search=${search}&type=${type}">${page }</a></li>
 				  </c:forEach>
 				  <c:if test="${pageMaker.next }">
-				  	<li class="page-item"><a class="page-link" href="/board/list?page=${pageMaker.endPage+1}&search=${search}&type=${type}">Next</a></li>
+				  	<li class="page-item"><a class="page-link" href="/board/mylist?page=${pageMaker.endPage+1}&search=${search}&type=${type}">Next</a></li>
 			   	  </c:if>	
 			   </ul>
 		  </div> 

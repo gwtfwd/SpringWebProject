@@ -23,13 +23,35 @@
 	</select>
 	
 	<update id="updateUser">
-		update account set pw=#{pw}, email=#{email} where id=#{id}
+		update account set pw=#{pw}, email=#{email}, admin=#{admin} where id=#{id}
 	</update>
 	
 	<insert id="join">
 		insert into account (id, pw, email, admin) values (#{id}, #{pw}, #{email}, #{admin})
 	</insert>
 	
+	<update id="updateAccountDisable">
+		update 
+			account 
+		set 
+			admin = #{user.admin}
+		where 
+			id = #{user.id}
+	</update>
+
+	<!-- 관리자페이지 리스트 -->
 	
+	
+	<select id="getListPageByAdmin" resultType="kr.green.springwebproject.dao.User">
+		select * from account where not id = #{user.id} limit #{cri.pageStart}, #{cri.perPageNum} 
+	</select>
+	
+	<select id="getCountAccountByAdmin" resultType="java.lang.Integer">
+		select count(id) from account
+	</select>
+	
+	<select id="getAccountById" resultType="kr.green.springwebproject.dao.User">
+		select * from account where not id = #{user.id}
+	</select>
 
 </mapper>

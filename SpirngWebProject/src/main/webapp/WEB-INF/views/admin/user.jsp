@@ -36,45 +36,49 @@
 		</nav>
 	</div>
 	<div class="container">
-		<div>
-			<h2 style="margin-bottom: 35px; margin-top: 80px; text-align: center;">게시판 목록</h2>
+		<div style="margin-bottom: 30px; margin-top: 80px; text-align: center;">
+			<h2 style="color:black;"><a href="/admin/board">게시판 관리</a> | 회원 관리</h2>
 		</div>
 		<table class="table" style="text-align: center;">
 			<thead>
 				<tr>
-					<th style="width: 10%;">No</th>
-					<th style="width: 50%;">제목</th>
-					<th style="width: 20%;">작성자</th>
-					<th style="width: 20%;">삭제</th>  
+					<th style="width: 20%;">ID</th>
+					<th style="width: 40%;">EMAIL</th>
+					<th style="width: 20%;">권한</th>  
+					<th style="width: 20%;">권한수정</th>  
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="board" items="${list}" varStatus="status">
+				<c:forEach var="user" items="${list}" varStatus="page">
 					<tr>
-						<td>${board.number }</td>
-						<td><a href="/board/detail?number=${board.number }">${board.title }</a></td>
-						<td>${board.author }</td>
+						<td>${user.id }</td>
+						<td>${user.email }</td>
+						<td>${user.admin }</td>
 						<td>
-							<c:if test="${board.disable.compareTo('true') == 0 }">
-								<button onclick="location.href='/admin/board/disable?number=${board.number}&disable=false'">복구</button>
+							<c:if test="${user.admin.compareTo('admin') == 0 }">
+								<a href="/admin/user/set?admin=user&id=${user.id}&page=${pageMaker.criteria.page }">		
+									<button >user</button>
+								</a>							
 							</c:if>  
-							<c:if test="${board.disable.compareTo('false') == 0 }">
-								<button onclick="location.href='/admin/board/disable?number=${board.number}&disable=true'">삭제</button>
+							<c:if test="${user.admin.compareTo('user') == 0 }">
+								<a href="/admin/user/set?admin=admin&id=${user.id}&page=${pageMaker.criteria.page }">	
+									<button >admin</button>
+								</a>
 							</c:if>
-						</td>  
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 		<ul class="pagination" style="justify-content:center;">
 			  <c:if test="${pageMaker.prev }">
-				<li class="page-item"><a class="page-link" href="/admin/main?page=${pageMaker.startPage-1}">Prev</a></li>
+				<li class="page-item"><a class="page-link" href="/admin/user?page=${pageMaker.startPage-1}">Prev</a></li>
 			  </c:if>
 			  <c:forEach var="page" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
-			  	<li class="page-item"><a class="page-link" href="/admin/main?page=${page }">${page }</a></li>
+			  	<li class="page-item"><a class="page-link" href="/admin/user?page=${page }">${page }</a></li>
 			  </c:forEach>
 			  <c:if test="${pageMaker.next }">
-			  	<li class="page-item"><a class="page-link" href="/admin/main?page=${pageMaker.endPage+1}">Next</a></li>
+			  	<li class="page-item"><a class="page-link" href="/admin/user?page=${pageMaker.endPage+1}">Next</a></li>
 		   	  </c:if>	
 		</ul>
 	</div>

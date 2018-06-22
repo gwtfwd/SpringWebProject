@@ -43,12 +43,29 @@ public interface BoardMapper {
 	public Integer getCountBoardByContents(@Param("search") String search);
 	public List<Board> getListPageByContents(@Param("cri") Criteria cri, @Param("search") String search);
 	
+	
 	public void updateBoardDisable(@Param("board") Board board);
 	public List<Board> getBoardAll();
 	
 	public List<Board> getListPageByAdmin(@Param("cri") Criteria cri);
 	
 	public int getCountBoardByAdmin();
+	
+	////////////////////////////////////////////////////////
+	
+	public int getCountBoardMyList(@Param("user") User user);
+	public List<Board> getMyListPage(@Param("cri") Criteria cri,@Param("user") User user);
+	
+	public Integer getCountBoardMyListByTitle(@Param("search") String search,@Param("user") User user);
+	public List<Board> getMyListPageByTitle(@Param("cri") Criteria cri, @Param("search") String search,@Param("user") User user);
+
+	public Integer getCountBoardMyListByAuthor(@Param("search") String search,@Param("user") User user);
+	public List<Board> getMyListPageByAuthor(@Param("cri") Criteria cri, @Param("search") String search,@Param("user") User user);
+	
+	public Integer getCountBoardMyListByContents(@Param("search") String search,@Param("user") User user);
+	public List<Board> getMyListPageByContents(@Param("cri") Criteria cri, @Param("search") String search,@Param("user") User user);
+	
+	
 	
 }
 

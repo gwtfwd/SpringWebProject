@@ -160,6 +160,59 @@ public class BoardController {
 	}
 	
 	
+	@RequestMapping(value = "mylist")
+	public String boardMyListGet(Model model, Criteria cri, String search, Integer type, HttpServletRequest request, User user) {
+		
+		HttpSession session = request.getSession();
+		user = (User)session.getAttribute("user");
+		
+		if(cri == null) {
+			cri = new Criteria();
+		}
+		
+		int totalCount=0;
+		PageMaker pageMaker = new PageMaker();
+		ArrayList<Board> list;
+		pageMaker.setCriteria(cri);
+		
+		if( type == null ) {
+			type = 0;
+		}
+		if( type == 0 ) {
+			totalCount = boardMapper.getCountBoardMyList(user);
+			list = (ArrayList)boardMapper.getMyListPage(cri, user);
+		}
+		else if( type == 1 ) {
+			totalCount = boardMapper.getCountBoardMyListByTitle("%"+search+"%", user);
+			list = (ArrayList)boardMapper.getMyListPageByTitle(cri, "%"+search+"%", user);
+		}
+		else if( type == 2 ) {
+			totalCount = boardMapper.getCountBoardMyListByAuthor("%"+search+"%", user);
+			list = (ArrayList)boardMapper.getMyListPageByAuthor(cri, "%"+search+"%", user);
+		}
+		else {
+			totalCount = boardMapper.getCountBoardMyListByContents("%"+search+"%", user);
+			list = (ArrayList)boardMapper.getMyListPageByContents(cri, "%"+search+"%", user);
+		}
+		
+		pageMaker.setTotalCount(totalCount);
+		model.addAttribute("list",list);
+		model.addAttribute("pageMaker", pageMaker);
+		model.addAttribute("search", search);
+		model.addAttribute("type", type);
+		System.out.println(pageMaker);
+		
+		
+		boolean admin = false;
+		
+		if(user.getAdmin().compareTo("admin") == 0)
+			admin = true;
+		model.addAttribute("admin", admin);
+		
+		
+		return "/board/mylist";
+	}
+	
 }
 
 
