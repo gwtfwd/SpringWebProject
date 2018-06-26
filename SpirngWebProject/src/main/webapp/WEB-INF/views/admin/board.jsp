@@ -38,7 +38,7 @@
 	<div class="container">
 		<div style="margin-bottom: 30px; margin-top: 80px; text-align: center;">
 			<h2 style="color:black;">게시판 관리
-				<c:if test="${superadmin}">
+				<c:if test="${admin}">
 					 <a href="/admin/user"> | 회원 관리</a>
 				</c:if>
 			</h2>

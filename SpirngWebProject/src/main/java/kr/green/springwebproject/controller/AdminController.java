@@ -59,7 +59,7 @@ public class AdminController {
 		
 		boolean admin = false;
 		
-		if(user.getAdmin().compareTo("user") !=0)
+		if(user.getAdmin().compareTo("superadmin") ==0)
 			admin = true;
 		model.addAttribute("admin", admin);
 		
