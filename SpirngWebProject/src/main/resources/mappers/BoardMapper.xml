@@ -14,11 +14,11 @@
 	</select>
 	
 	<update id="modifyBoard">
-		update board set title=#{board.title}, author=#{board.author}, contents=#{board.contents} where number=#{board.number}
+		update board set title=#{board.title}, author=#{board.author}, contents=#{board.contents}, created_date =#{board.created_date}, filepath =#{board.filepath} where number=#{board.number}
 	</update>
 	
 	<insert id="insertBoard">
-		insert into board (title, contents, author, disable) values (#{board.title}, #{board.contents},#{board.author}, 'false')
+		insert into board (title, contents, author, disable, filepath) values (#{board.title}, #{board.contents},#{board.author}, 'false', #{board.filepath})
 	</insert>
 
 	<select id="getListPage" resultType="kr.green.springwebproject.dao.Board">

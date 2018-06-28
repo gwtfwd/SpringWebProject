@@ -40,6 +40,21 @@
             </div>
             <div class="offset-2 col-8">
                <div class="form-group">
+                    <label >첨부파일:</label>
+	                    <div class="form-control" id="file" name="file">
+	                    	<c:if test="${fileName != null }">
+	                    		<a href="/board/download?fileName=${board.filepath }" target="_blank">
+	                   				${fileName}
+	                   			</a>
+	                   		</c:if>	
+	                   		<c:if test="${fileName == null }">
+	                   			첨부파일 없음
+	                    	</c:if>	
+	                    </div>
+               </div>
+            </div>
+            <div class="offset-2 col-8">
+               <div class="form-group">
                     <label for="comment">내용:</label>
                     <textarea class="form-control" rows="6" id="comment" name="contents" disabled>${board.contents}</textarea>
                     

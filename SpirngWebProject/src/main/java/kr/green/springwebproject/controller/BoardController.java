@@ -3,8 +3,10 @@ package kr.green.springwebproject.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -135,23 +137,63 @@ public class BoardController {
 		
 		model.addAttribute("isAuthor",isAuthor);
 		
+		// 파일명 수정하는 과정
+		String filepath = board.getFilepath();
+		
+		if(filepath != null) {
+			
+		// /년/월/일/uuid_파일명 - > _ 다음에 나오는 글자를 잘라서 가져옴
+		String fileName = filepath.substring(filepath.indexOf("_")+1);
+		model.addAttribute("fileName",fileName);
+		
+		}
+			
+	    
 		return "/board/detail";
 	}
 	
 	@RequestMapping(value = "modify", method = RequestMethod.GET)
-	public String boardModifyGet(HttpServletRequest request, Model model) {
-		
-		int number = Integer.parseInt(request.getParameter("number"));
+	public String boardModifyGet(HttpServletRequest request, Model model, Integer del, Integer number) {
 		
 		Board board = boardMapper.getBoardByNumber(number);
 		
+		if(del != null && del == 1) {
+			board.setFilepath(null);
+		}
+		
 		model.addAttribute("board", board);
+		
+		
+		// 파일명 수정하는 과정
+		String filepath = board.getFilepath();
+		
+		if(filepath != null) {
+			
+		// /년/월/일/uuid_파일명 - > _ 다음에 나오는 글자를 잘라서 가져옴
+		String fileName = filepath.substring(filepath.indexOf("_")+1);
+		model.addAttribute("fileName",fileName);
+		
+		}
 		
 		return "/board/modify";
 	}
 	
 	@RequestMapping(value="modify", method= RequestMethod.POST)
-	public String boardDetailPost(Model model, HttpServletRequest request, Board board) {
+	public String boardDetailPost(Model model, HttpServletRequest request, Board board, MultipartFile file, Integer del) throws Exception {
+		
+
+		Date created_date = new Date();
+		board.setCreated_date(created_date); 
+		
+
+		if(del != null) {
+			board.setFilepath(null);
+		}
+		
+		if (file != null && file.getOriginalFilename().length() != 0) {
+			String filepath = UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes());
+			board.setFilepath(filepath);
+		}
 		
 		boardMapper.modifyBoard(board);
 		
@@ -173,9 +215,13 @@ public class BoardController {
 		
 		board.setAuthor(user.getId());
 		
-		boardMapper.insertBoard(board);
 		
-		UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(),file.getBytes());
+		if(file != null) {
+			String filepath = UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(),file.getBytes());
+			board.setFilepath(filepath);
+		}
+
+		boardMapper.insertBoard(board);
 		
 		return "redirect:/board/list";
 	}
@@ -270,6 +316,7 @@ public class BoardController {
 		
 		return "/board/mylist";
 	}
+	
 	
 }
 
