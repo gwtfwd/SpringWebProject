@@ -158,6 +158,8 @@ public class BoardController {
 		Board board = boardMapper.getBoardByNumber(number);
 		
 		if(del != null && del == 1) {
+			
+			// db불러온 게시판의 정보에서 
 			board.setFilepath(null);
 		}
 		
