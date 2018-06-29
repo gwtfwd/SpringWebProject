@@ -69,6 +69,9 @@
                <a href="/board/modify?number=${board.number }">
                		<button type="button" class="btn btn-primary">수정</button>
             	</a>
+            	<a href="/board/delete?number=${board.number }">
+               		<button type="button" class="btn btn-outline-danger">삭제</button>
+               </a>
             	</c:if>
             	
             	

@@ -53,5 +53,11 @@
 	<select id="getAccountById" resultType="kr.green.springwebproject.dao.User">
 		select * from account where not id = #{user.id}
 	</select>
+	
+	
+	<delete id="deleteUser">
+		delete from account where id = #{user.id}
+	</delete>
+	
 
 </mapper>

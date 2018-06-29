@@ -75,11 +75,12 @@
             </div>
             <div class="offset-2 col-8">
                <a>
-               <button type="submit" class="btn btn-primary">수정</button>
+               		<button type="submit" class="btn btn-primary">수정</button>
                </a>
                <a href="/board/list">
-               <button type="submit" class="btn btn-primary">취소</button>
+              		<button type="submit" class="btn btn-primary">취소</button>
                </a>
+               
             </div>
          </div>
       </form>

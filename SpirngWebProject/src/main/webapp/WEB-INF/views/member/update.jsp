@@ -24,6 +24,7 @@
 		<label>email : </label><input type="email" name="email" autocomplete=off value="${user.email }"/><br><br>
 		<input type="submit" value="OK"/>
 		<a href="/board/list"><input type="button" value="CANCLE"/></a>
+		<a href="/member/unjoin?id=${user.id }"><input type="button" value="회원탈퇴"/></a>
 	</form>
 
 </body>

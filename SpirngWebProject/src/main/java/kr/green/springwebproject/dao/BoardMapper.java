@@ -65,8 +65,7 @@ public interface BoardMapper {
 	public Integer getCountBoardMyListByContents(@Param("search") String search,@Param("user") User user);
 	public List<Board> getMyListPageByContents(@Param("cri") Criteria cri, @Param("search") String search,@Param("user") User user);
 	
-	
-	
+	public void deleteBoard(@Param("board") Board board);
 }
 
 

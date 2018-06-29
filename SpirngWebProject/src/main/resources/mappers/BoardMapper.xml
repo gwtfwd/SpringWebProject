@@ -123,6 +123,11 @@
 		select count(number) from board where contents like #{search} and author = #{user.id}
 	</select>  
 	
+	
+	<delete id="deleteBoard">
+		delete from board where number = #{board.number}
+	</delete>
+	
 </mapper>
 
 

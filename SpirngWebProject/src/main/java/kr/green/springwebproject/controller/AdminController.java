@@ -132,6 +132,22 @@ public class AdminController {
 		return "redirect:/admin/user";
 	}
 	
+	@RequestMapping(value = "/board/delete")
+	public String boardDeletePost(Model model, Integer page, Integer number, Board board) throws Exception {
+		
+		
+		if(page == null)
+			page =1;
+		
+		model.addAttribute("page",page);
+		
+		if(number != null) {
+			board = boardMapper.getBoardByNumber(number);
+			boardMapper.deleteBoard(board);
+		}
+		
+		return "redirect:/admin/board";
+	}
 	
 	
 }

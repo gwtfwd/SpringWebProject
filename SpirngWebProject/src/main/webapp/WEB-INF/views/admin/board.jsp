@@ -48,9 +48,10 @@
 			<thead>
 				<tr>
 					<th style="width: 10%;">No</th>
-					<th style="width: 50%;">제목</th>
-					<th style="width: 20%;">작성자</th>
-					<th style="width: 20%;">삭제</th>  
+					<th style="width: 40%;">제목</th>
+					<th style="width: 15%;">작성자</th>
+					<th style="width: 15%;">삭제</th> 
+					<th style="width: 20%;">완전삭제</th>  
 				</tr>
 			</thead>
 			<tbody>
@@ -66,7 +67,10 @@
 							<c:if test="${board.disable.compareTo('false') == 0 }">
 								<button onclick="location.href='/admin/board/disable?number=${board.number}&disable=true&page=${pageMaker.criteria.page }'">삭제</button>
 							</c:if>
-						</td>  
+						</td> 
+						<td>
+		               		<button onclick="deleteBoard(${board.number}, ${pageMaker.criteria.page})">delete</button>
+		               	</td> 
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -83,5 +87,22 @@
 		   	  </c:if>	
 		</ul>
 	</div>
+	
+	<script type="text/javascript">
+		function deleteBoard(number, page){
+			
+			var conf = confirm ("삭제하시겠습니까?");
+			if(conf){
+				var link = "/admin/board/delete?number=" + number + "&page=" + page;
+				location.href = link;
+			}
+		}
+	</script>
+
 </body>
 </html>
+
+
+
+
+

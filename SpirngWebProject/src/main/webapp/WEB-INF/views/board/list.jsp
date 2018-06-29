@@ -46,9 +46,9 @@
 			</c:if>	
 			<a href="/board/mylist" >내가쓴글 </a>
 
-			<a href="/member/logout" style="float:right;">로그아웃 </a>
+			<a href="/member/logout" style="float:right;"> 로그아웃 </a>
 		 	<span style="float:right;"> | </span>
-			<a href="/member/update" style="float:right;">회원정보수정</a>
+			<a href="/member/update" style="float:right;"> 회원정보수정</a>
 		</div>
 		<div> 	
 			<table class="table table-dark table-striped">

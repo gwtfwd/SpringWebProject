@@ -26,6 +26,10 @@ public interface UserMapper {
 	public int getCountAccountByAdmin();
 	
 	public User getAccountById(@Param("user") User user);
+
+	public void deleteUser(@Param("user") User user);
+
+
 }
 
 
