@@ -92,7 +92,7 @@
 				contentType : false,
 				type : 'POST',
 				success : function(data){
-
+  
 					var str="";
 					if(checkImageType(data)){
 						str="<div>" + "<img src='/board/download?fileName="+ data +"'/>" + data + "</div>";
