@@ -33,6 +33,7 @@ import kr.green.springwebproject.dao.User;
 import kr.green.springwebproject.dao.UserMapper;
 import kr.green.springwebproject.pagenation.Criteria;
 import kr.green.springwebproject.pagenation.PageMaker;
+import kr.green.springwebproject.utils.MediaUtils;
 import kr.green.springwebproject.utils.UploadFileUtils;
 
 
@@ -261,14 +262,26 @@ public class BoardController {
 	    
 	    try{
 	        String FormatName = fileName.substring(fileName.lastIndexOf(".")+1);
+	        
+	        // 확장지를 통해 미디어 타입 정보를 가져옴
+	        MediaType mType = MediaUtils.getMediaType(FormatName);
+	        
 	        HttpHeaders headers = new HttpHeaders();
 	        in = new FileInputStream(uploadPath+fileName);
-
-	        fileName = fileName.substring(fileName.indexOf("_")+1);
-	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-	        headers.add("Content-Disposition",  "attachment; filename=\"" 
-				+ new String(fileName.getBytes("UTF-8"), "ISO-8859-1")+"\"");
+	        
+	        // 이미지이면
+	        if(mType != null) {
+	        	headers.setContentType(mType);
+	        }
+	        else {
+	        	fileName = fileName.substring(fileName.indexOf("_")+1);
+		        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		        headers.add("Content-Disposition",  "attachment; filename=\"" 
+					+ new String(fileName.getBytes("UTF-8"), "ISO-8859-1")+"\"");
+	        }
+	        
 	        entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in),headers,HttpStatus.CREATED);
+	        
 	    }catch(Exception e) {
 	        e.printStackTrace();
 	        entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
@@ -276,6 +289,17 @@ public class BoardController {
 	        in.close();
 	    }
 	    return entity;
+	}
+	
+	// 썸네일을 가져오기 위해 서버에 일단 파일을 업로드하여 썸네일을 생성
+	// (UploadFrilUtils.uploadFile)하고 생성된 썸네일의 경로 및 이름을 가져옴
+	@ResponseBody
+	@RequestMapping("/display")
+	public ResponseEntity<String> downloadFile(MultipartFile file)throws Exception{
+		
+		String fileName = UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes());
+		
+		return new ResponseEntity<String>(fileName, HttpStatus.OK );
 	}
 	
 	

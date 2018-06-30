@@ -15,6 +15,14 @@
 	<title>Insert title here</title>
 </head>
 <body>
+	<style>
+		.fileDrop{
+			width : 100%;
+			height : 200px;
+			border : solid 1px blue;
+		}	
+	</style>
+	
 	<div class="container">
 		<div class="row "> 
 			<h3 class="offset-2 col-8">게시판 글쓰기</h3>
@@ -31,6 +39,8 @@
 					<div class="form-group">
 				        <label>파일</label>
 				        <input type="file" class="form-control" name="file"/>
+				        <div class ="fileDrop"></div>
+				        <div class ="uploadedList"></div>
 				    </div>
 				</div>
 				<div class="offset-2 col-8">
@@ -51,5 +61,51 @@
 			</div>
 		</form>
 	</div>
+	
+	<script type="text/javascript">
+	
+		// i: 대소문자 구별 없이
+		// 파일이름에 jsp, gif, png, jpeg 이 들어가는지 확인
+		function checkImageType(fileName){
+			var pattern = /jsp|gif|png|jpeg/i;
+			return fileName.match(pattern);
+		}
+	
+	
+		$(".fileDrop").on("dragenter dragover", function(e){
+			e.preventDefault();
+		});
+		$(".fileDrop").on("drop", function(e){
+			e.preventDefault();
+			var files = e.originalEvent.dataTransfer.files;
+			var file = files[0];
+			console.log(file);
+			
+			var formData = new FormData();
+			formData.append("file", file);
+			
+			$.ajax({
+				url : '/board/display',
+				data : formData,
+				dataType :'text',
+				processData : false,
+				contentType : false,
+				type : 'POST',
+				success : function(data){
+
+					var str="";
+					if(checkImageType(data)){
+						str="<div>" + "<img src='/board/download?fileName="+ data +"'/>" + data + "</div>";
+						
+					}else{
+						str = "<div>" + data + "</div>";
+					}
+					$(".uploadedList").append(str);					
+				}
+			})
+		});
+
+	
+	</script>
 </body>
 </html>
