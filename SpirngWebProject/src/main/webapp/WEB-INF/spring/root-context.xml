@@ -53,4 +53,6 @@
       </props>
   </property>
 </bean>
+<mybatis-spring:scan base-package="kr.green.springwebproject.dao"/>
+<context:component-scan base-package="kr.green.springwebproject.service"></context:component-scan>
 </beans>

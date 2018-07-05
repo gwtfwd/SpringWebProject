@@ -16,6 +16,8 @@ public class Board {
 	private Date created_date;
 	private String filepath;
 	
+	
+	
 	public Date getCreated_date() {
 		return created_date;
 	}

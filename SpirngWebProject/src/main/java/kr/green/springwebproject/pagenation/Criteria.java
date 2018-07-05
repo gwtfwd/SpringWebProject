@@ -22,13 +22,25 @@ public class Criteria {
 		return page;
 	}
 	public void setPage(int page) {
-		this.page = page;
+		//현재 페이지 번호를 음수로 설정하려 할 때
+
+		if(page <= 0) {
+			this.page = 1;
+		}
+		else
+			this.page = page;
 	}
 	public int getPerPageNum() {
 		return perPageNum;
 	}
+
 	public void setPerPageNum(int perPageNum) {
-		this.perPageNum = perPageNum;
+		
+		if(perPageNum <=0 || perPageNum > 100) {
+			this.perPageNum = 10;
+		}
+		else
+			this.perPageNum = perPageNum;
 	}
 	
 	
@@ -41,6 +53,7 @@ public class Criteria {
 	// 쿼리 limit 0, 10 에서 0에 해당하는 메소드 getPageStart(시작점) -> 0부터 10개
 	// limit n, 10 -> n = (page-1)*perPageNum
 	public int getPageStart() {
+		
 		return (page-1)*perPageNum;
 	}
 	

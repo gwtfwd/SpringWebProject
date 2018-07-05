@@ -33,6 +33,8 @@ import kr.green.springwebproject.dao.User;
 import kr.green.springwebproject.dao.UserMapper;
 import kr.green.springwebproject.pagenation.Criteria;
 import kr.green.springwebproject.pagenation.PageMaker;
+import kr.green.springwebproject.service.BoardService;
+import kr.green.springwebproject.service.UserService;
 import kr.green.springwebproject.utils.MediaUtils;
 import kr.green.springwebproject.utils.UploadFileUtils;
 
@@ -46,17 +48,20 @@ import kr.green.springwebproject.utils.UploadFileUtils;
 public class BoardController {
 	
 	@Autowired
-	BoardMapper boardMapper;
+	private BoardMapper boardMapper;
+	
+	@Autowired
+	private BoardService boardService;
 	
 	@Resource
 	private String uploadPath;
 	
+	@Autowired
+	private UserService userService;
+	
 	
 	@RequestMapping(value = "list")
 	public String boardListGet(Model model, Criteria cri, String search, Integer type, HttpServletRequest request) {
-		
-		System.out.println("Search: "+ search);
-		System.out.println("Type : "+ type);
 		
 		//Criteria cri = new Criteria(1,10);
 		
@@ -69,25 +74,8 @@ public class BoardController {
 		ArrayList<Board> list;
 		pageMaker.setCriteria(cri);
 		
-		if( type == null ) {
-			type = 0;
-		}
-		if( type == 0 ) {
-			totalCount = boardMapper.getCountBoard();
-			list = (ArrayList)boardMapper.getListPage(cri);
-		}
-		else if( type == 1 ) {
-			totalCount = boardMapper.getCountBoardByTitle("%"+search+"%");
-			list = (ArrayList)boardMapper.getListPageByTitle(cri, "%"+search+"%");
-		}
-		else if( type == 2 ) {
-			totalCount = boardMapper.getCountBoardByAuthor("%"+search+"%");
-			list = (ArrayList)boardMapper.getListPageByAuthor(cri, "%"+search+"%");
-		}
-		else {
-			totalCount = boardMapper.getCountBoardByContents("%"+search+"%");
-			list = (ArrayList)boardMapper.getListPageByContents(cri, "%"+search+"%");
-		}
+		totalCount = boardService.getCountByBoardList(type, search, cri);
+		list = boardService.getListBoard(type, search, cri);
 		
 		//ArrayList<Board> list = (ArrayList)boardMapper.getBoard();
 		
@@ -96,26 +84,29 @@ public class BoardController {
 		model.addAttribute("pageMaker", pageMaker);
 		model.addAttribute("search", search);
 		model.addAttribute("type", type);
-		System.out.println(pageMaker);
+		
 		
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 			
-		boolean admin = false;
+		
+		boolean admin = userService.isAdmin(user);
+		//boolean admin = false;
 			
-		if(user.getAdmin().compareTo("user") !=0)
-			admin = true;
+		/*if(user.getAdmin().compareTo("user") !=0)
+			admin = true;*/
+		
+		
 		model.addAttribute("admin", admin);
 		
 		return "/board/list";
 	}
 	
 	@RequestMapping(value = "detail", method = RequestMethod.GET)
-	public String boardDetailGet(HttpServletRequest request, Model model) {
+	public String boardDetailGet(HttpServletRequest request, Model model, int number) {
 		
-		int number = Integer.parseInt(request.getParameter("number"));
 		
-		Board board = boardMapper.getBoardByNumber(number);
+		Board board = boardService.getBoard(number);
 		
 		
 		HttpSession session = request.getSession();
@@ -123,18 +114,12 @@ public class BoardController {
 		
 		
 		model.addAttribute("board", board);
-		
 		model.addAttribute("user", user);
 		
 		/*System.out.println(boardMapper.getBoardByNumber(number));*/
 		
-		boolean isAuthor = false;
 		
-		if(user.getId().compareTo(board.getAuthor())==0) {		// 유저의 id와 게시글의 저자가 같으면
-			isAuthor = true;
-		}else {
-			isAuthor = false;
-		}
+		boolean isAuthor = boardService.isAuthor(user, board);
 		
 		model.addAttribute("isAuthor",isAuthor);
 		
@@ -156,7 +141,7 @@ public class BoardController {
 	@RequestMapping(value = "modify", method = RequestMethod.GET)
 	public String boardModifyGet(HttpServletRequest request, Model model, Integer del, Integer number) {
 		
-		Board board = boardMapper.getBoardByNumber(number);
+		Board board = boardService.getBoard(number);
 		
 		if(del != null && del == 1) {
 			
@@ -184,34 +169,7 @@ public class BoardController {
 	@RequestMapping(value="modify", method= RequestMethod.POST)
 	public String boardDetailPost(Model model, HttpServletRequest request, Board board, MultipartFile file, Integer del) throws Exception {
 		
-		// 수정된 날짜로 created_date 업데이트
-		Date created_date = new Date();
-		board.setCreated_date(created_date); 
-		
-		// 기존 첨부파일 경로를 가져오기 위함
-		Board tmp = boardMapper.getBoardByNumber(board.getNumber());
-	
-		
-		// 수정될 첨부파일이 있는 경우
-		if (file != null && file.getOriginalFilename().length() != 0) {
-			String filepath = UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes());
-			board.setFilepath(filepath);
-		}
-		
-		// 수정될 첨부파일이 없지만 기존 첨부파일이 지워져야 하는 경우
-		else if(del != null) {
-			
-			// 실제 파일을 삭제
-			new File(uploadPath + tmp.getFilepath().replace('/', File.separatorChar)).delete();
-			board.setFilepath(null);
-		}
-		
-		// 수정될 파일이 없고 기존 파일을 유지하는 경우
-		else {
-			board.setFilepath(tmp.getFilepath());
-		}
-		
-		boardMapper.modifyBoard(board);
+		boardService.modifyBoard(board, file, uploadPath, del);
 		
 		return "redirect:/board/list";
 	}
