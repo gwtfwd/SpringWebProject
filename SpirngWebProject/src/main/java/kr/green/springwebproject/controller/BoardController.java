@@ -3,10 +3,8 @@ package kr.green.springwebproject.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -28,9 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.green.springwebproject.dao.Board;
-import kr.green.springwebproject.dao.BoardMapper;
 import kr.green.springwebproject.dao.User;
-import kr.green.springwebproject.dao.UserMapper;
 import kr.green.springwebproject.pagenation.Criteria;
 import kr.green.springwebproject.pagenation.PageMaker;
 import kr.green.springwebproject.service.BoardService;
@@ -47,8 +43,6 @@ import kr.green.springwebproject.utils.UploadFileUtils;
 
 public class BoardController {
 	
-	@Autowired
-	private BoardMapper boardMapper;
 	
 	@Autowired
 	private BoardService boardService;
@@ -187,15 +181,7 @@ public class BoardController {
 		
 		User user = (User)session.getAttribute("user");
 		
-		board.setAuthor(user.getId());
-		
-		
-		if(file != null) {
-			String filepath = UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(),file.getBytes());
-			board.setFilepath(filepath);
-		}
-
-		boardMapper.insertBoard(board);
+		boardService.writeBoard(board, user, file, uploadPath);
 		
 		return "redirect:/board/list";
 	}
@@ -271,43 +257,23 @@ public class BoardController {
 			cri = new Criteria();
 		}
 		
-		int totalCount=0;
 		PageMaker pageMaker = new PageMaker();
-		ArrayList<Board> list;
 		pageMaker.setCriteria(cri);
 		
-		if( type == null ) {
-			type = 0;
-		}
-		if( type == 0 ) {
-			totalCount = boardMapper.getCountBoardMyList(user);
-			list = (ArrayList)boardMapper.getMyListPage(cri, user);
-		}
-		else if( type == 1 ) {
-			totalCount = boardMapper.getCountBoardMyListByTitle("%"+search+"%", user);
-			list = (ArrayList)boardMapper.getMyListPageByTitle(cri, "%"+search+"%", user);
-		}
-		else if( type == 2 ) {
-			totalCount = boardMapper.getCountBoardMyListByAuthor("%"+search+"%", user);
-			list = (ArrayList)boardMapper.getMyListPageByAuthor(cri, "%"+search+"%", user);
-		}
-		else {
-			totalCount = boardMapper.getCountBoardMyListByContents("%"+search+"%", user);
-			list = (ArrayList)boardMapper.getMyListPageByContents(cri, "%"+search+"%", user);
-		}
+		ArrayList<Board> list = null;
+        int totalCount=0;
+        String author = user.getId();
+
+        totalCount= boardService.getCountByBoardList(2, user.getId(),cri);
+        list = boardService.getListBoard(2, user.getId(), cri);
 		
 		pageMaker.setTotalCount(totalCount);
 		model.addAttribute("list",list);
 		model.addAttribute("pageMaker", pageMaker);
-		model.addAttribute("search", search);
-		model.addAttribute("type", type);
-		System.out.println(pageMaker);
+
 		
+		boolean admin = userService.isAdmin(user);
 		
-		boolean admin = false;
-		
-		if(user.getAdmin().compareTo("user") != 0)
-			admin = true;
 		model.addAttribute("admin", admin);
 		
 		
@@ -317,12 +283,7 @@ public class BoardController {
 	@RequestMapping(value = "delete")
 	public String boardDeletePost(Integer number) throws Exception {
 		
-		
-		Board board = boardMapper.getBoardByNumber(number);
-
-		board.setDisable("true");
-		
-		boardMapper.updateBoardDisable(board);
+		boardService.deleteBoard(number);
 		
 		return "redirect:/board/list";
 	}

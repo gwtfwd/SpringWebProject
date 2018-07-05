@@ -1,11 +1,15 @@
 package kr.green.springwebproject.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import kr.green.springwebproject.dao.Board;
 import kr.green.springwebproject.dao.User;
 import kr.green.springwebproject.dao.UserMapper;
+import kr.green.springwebproject.pagenation.Criteria;
 
 
 @Service
@@ -82,8 +86,6 @@ public class UserService {
 		
 	}
 	
-	
-
 	public boolean unjoin(User user) {
 		
 		try {
@@ -107,6 +109,61 @@ public class UserService {
 		}
 		return false;
 	}
+	
+	
+	public boolean isSuperadmin(User user) {
+		
+		if(user.getAdmin().compareTo("superadmin") ==0)
+			return true;
+		return false;
+	}
+	
+	public int getCountAccountByAdmin() {
+		
+		int totalCount = 0;
+		
+		totalCount = userMapper.getCountAccountByAdmin();
+		
+		return totalCount;
+	}
+	
+	public ArrayList<User> getListPageByAdmin(Criteria cri, User user) {
+		
+		ArrayList<User> list = null;
+		
+		list = (ArrayList)userMapper.getListPageByAdmin(cri, user);
+		
+		return list;
+	}
+	
+	public User getUser(User user) {
+		
+		return userMapper.getAccountById(user);
+	}
+	
+	public boolean updateAccountDisable(User user) {
+		
+		userMapper.updateAccountDisable(user);
+		
+		return true;
+	}
+	
+	public User getUserById(String id) {
+		
+		
+		return userMapper.getUserById(id);
+	}
+	
+	
+	public boolean updateUser(User user) {
+		
+		userMapper.updateUser(user);
+		
+		return true;
+	}
+	
+	
+	
 	
 	
 }

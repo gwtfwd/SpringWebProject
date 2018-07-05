@@ -46,6 +46,8 @@ public interface BoardMapper {
 	public void updateBoardDisable(@Param("board") Board board);
 	public List<Board> getBoardAll();
 	
+	
+	// °ü¸®ÀÚ
 	public List<Board> getListPageByAdmin(@Param("cri") Criteria cri);
 	
 	public int getCountBoardByAdmin();

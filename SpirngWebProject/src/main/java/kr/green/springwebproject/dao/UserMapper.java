@@ -16,6 +16,8 @@ public interface UserMapper {
 	
 	public User loginById(@Param("id") String id);
 	
+	public User getUserById(@Param("id") String id);
+	
 	public void updateUser(User user);
 	
 	public void updateAccountDisable(@Param("user") User user);

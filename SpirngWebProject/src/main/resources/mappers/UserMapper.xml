@@ -22,6 +22,10 @@
 		select * from account where id=#{id}
 	</select>
 	
+	<select id="getUserById" resultType="kr.green.springwebproject.dao.User">
+		select * from account where id=#{id}
+	</select>
+	
 	<update id="updateUser">
 		update account set pw=#{pw}, email=#{email}, admin=#{admin} where id=#{id}
 	</update>

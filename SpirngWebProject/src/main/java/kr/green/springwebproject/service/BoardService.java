@@ -1,6 +1,7 @@
 package kr.green.springwebproject.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -122,6 +123,64 @@ public class BoardService {
 		
 	}
 	
+	public boolean writeBoard(Board board, User user, MultipartFile file, String uploadPath) throws Exception {
+		
+		board.setAuthor(user.getId());
+		
+		if(file != null) {
+			String filepath = UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(),file.getBytes());
+			board.setFilepath(filepath);
+		}
+
+		boardMapper.insertBoard(board);
+		
+		return true;
+	}
+	
+	public boolean deleteBoard(int number) {
+		
+		Board board = boardMapper.getBoardByNumber(number);
+
+		board.setDisable("true");
+		
+		boardMapper.updateBoardDisable(board);
+		
+		return true;
+	}
+	
+	
+	public ArrayList<Board> getListPageByAdmin(Criteria cri) {
+		
+		ArrayList<Board> list = null;
+		
+		list = (ArrayList)boardMapper.getListPageByAdmin(cri);
+		
+		return list;
+	}
+	
+	public int getCountBoardByAdmin() {
+	
+		int totalCount = 0;
+		
+		totalCount = boardMapper.getCountBoardByAdmin();
+		
+		return totalCount;
+	}
+	
+	
+	public boolean updateBoardDisable(Board board) {
+		
+		boardMapper.updateBoardDisable(board);
+		
+		return true;
+	}
+	
+	public boolean deleteBoardReal(Board board) {
+		
+		boardMapper.deleteBoard(board);
+		
+		return true;
+	}
 	
 }
 

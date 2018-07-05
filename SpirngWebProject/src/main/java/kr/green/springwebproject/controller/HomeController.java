@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import kr.green.springwebproject.dao.BoardMapper;
 import kr.green.springwebproject.dao.User;
-import kr.green.springwebproject.dao.UserMapper;
 import kr.green.springwebproject.service.UserService;
 
 
@@ -33,9 +30,6 @@ import kr.green.springwebproject.service.UserService;
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
-	@Autowired
-	private BoardMapper boardMapper;
 	
 	@Autowired
 	private UserService userService;

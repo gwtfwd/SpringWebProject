@@ -12,22 +12,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import kr.green.springwebproject.dao.Board;
-import kr.green.springwebproject.dao.BoardMapper;
 import kr.green.springwebproject.dao.User;
-import kr.green.springwebproject.dao.UserMapper;
 import kr.green.springwebproject.pagenation.Criteria;
 import kr.green.springwebproject.pagenation.PageMaker;
+import kr.green.springwebproject.service.BoardService;
+import kr.green.springwebproject.service.UserService;
 
 @Controller
 @RequestMapping(value="/admin/*")
 public class AdminController {
 
 	@Autowired
-	BoardMapper boardMapper;		// 게시판 정보를 불러오기 위해
+	BoardService boardService;
 	
 	@Autowired
-	UserMapper userMapper;
-	
+	UserService userService;
 	
 	// 관리자페이지
 	@RequestMapping(value="/board", method=RequestMethod.GET)
@@ -39,11 +38,10 @@ public class AdminController {
 		
 		int totalCount=0;
 		
+		ArrayList<Board> list;
 		
-		ArrayList<Board> list = null;
-		
-		totalCount = boardMapper.getCountBoardByAdmin();
-		list = (ArrayList)boardMapper.getListPageByAdmin(cri);
+		totalCount = boardService.getCountBoardByAdmin();
+		list = (ArrayList)boardService.getListPageByAdmin(cri);
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(cri);
@@ -57,10 +55,9 @@ public class AdminController {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		
-		boolean admin = false;
 		
-		if(user.getAdmin().compareTo("superadmin") ==0)
-			admin = true;
+		boolean admin = userService.isSuperadmin(user);
+		
 		model.addAttribute("admin", admin);
 		
 		return "admin/board";
@@ -69,10 +66,9 @@ public class AdminController {
 	@RequestMapping(value="/board/disable")
 	public String boardDisable(Model model, Integer number, String disable, Integer page) throws Exception {
 		
-		Board board = boardMapper.getBoardByNumber(number);
-		System.out.println(board);
+		Board board = boardService.getBoard(number);
 		board.setDisable(disable);
-		boardMapper.updateBoardDisable(board);
+		boardService.updateBoardDisable(board);
 		
 		if(page == null)
 			page = 1;
@@ -91,9 +87,12 @@ public class AdminController {
 			cri = new Criteria();
 		}
 		
-		int totalCount=0;
-		totalCount = userMapper.getCountAccountByAdmin();
-		ArrayList<User> list = (ArrayList)userMapper.getListPageByAdmin(cri, user);
+		int totalCount;
+		totalCount = userService.getCountAccountByAdmin();
+		
+		ArrayList<User> list;
+		list = (ArrayList)userService.getListPageByAdmin(cri, user);
+		
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(cri);
@@ -108,11 +107,12 @@ public class AdminController {
 	
 	@RequestMapping(value="/user/disable")
 	public String AccountDisable(Model model, User user, String disable, Integer page) throws Exception {
+
 		
-		user = userMapper.getAccountById(user);
-		System.out.println(user);
+		user = userService.getUser(user);
 		user.setAdmin(disable);
-		userMapper.updateAccountDisable(user);
+		userService.updateAccountDisable(user);
+		
 		
 		if(page == null)
 			page = 1;
@@ -124,9 +124,11 @@ public class AdminController {
 	@RequestMapping(value="/user/set")
 	public String superadminUserSet(Model model, String admin, Integer page, String id) throws Exception {
 		
-		User user = userMapper.loginById(id);
+		
+		
+		User user = userService.getUserById(id);
 		user.setAdmin(admin);
-		userMapper.updateUser(user);
+		userService.updateUser(user);
 		model.addAttribute("page",page);
 		
 		return "redirect:/admin/user";
@@ -142,8 +144,8 @@ public class AdminController {
 		model.addAttribute("page",page);
 		
 		if(number != null) {
-			board = boardMapper.getBoardByNumber(number);
-			boardMapper.deleteBoard(board);
+			board = boardService.getBoard(number);
+			boardService.deleteBoardReal(board);
 		}
 		
 		return "redirect:/admin/board";
