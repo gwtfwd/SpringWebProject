@@ -175,12 +175,24 @@ public class BoardService {
 		return true;
 	}
 	
-	public boolean deleteBoardReal(Board board) {
+	/*public boolean deleteBoardReal(Board board) {
 		
 		boardMapper.deleteBoard(board);
 		
 		return true;
-	}
+	}*/
+	
+	public boolean deleteBoardReal(Integer number)
+	   {
+	      if(number != null)
+	      {
+	         Board board = boardMapper.getBoardByNumber(number);
+	         boardMapper.deleteBoard(board);
+	         return true;
+	      }
+	      return false;
+	   }
+	
 	
 }
 

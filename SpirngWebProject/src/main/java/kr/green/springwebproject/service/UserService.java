@@ -148,19 +148,21 @@ public class UserService {
 		return true;
 	}
 	
-	public User getUserById(String id) {
+	public void setUserById(String id, String admin) {
 		
+		User user = userMapper.getUserById(id);
 		
-		return userMapper.getUserById(id);
+		user.setAdmin(admin);
+		userMapper.updateUser(user);
 	}
 	
 	
-	public boolean updateUser(User user) {
+	/*public boolean updateUser(User user) {
 		
 		userMapper.updateUser(user);
 		
 		return true;
-	}
+	}*/
 	
 	
 	

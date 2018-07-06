@@ -23,12 +23,12 @@
 						<span style="color: white;"> | </span>
 						
 						<h6 style="display: inline-flex;">
-							<a href="/member/modify?id=${member.id }" style="color: white;">회원정보수정</a>
+							<a href="/member/update?id=${member.id }" style="color: white;">회원정보수정</a>
 						</h6>
 						<span style="color: white;"> | </span>
 						
 						<h6 style="display: inline-flex;">
-							<a href="/logout" style="color: white;">로그아웃</a>
+							<a href="/member/logout" style="color: white;">로그아웃</a>
 						</h6>
 					</div>
 				</div>

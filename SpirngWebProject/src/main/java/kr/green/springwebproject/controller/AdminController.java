@@ -124,11 +124,8 @@ public class AdminController {
 	@RequestMapping(value="/user/set")
 	public String superadminUserSet(Model model, String admin, Integer page, String id) throws Exception {
 		
-		
-		
-		User user = userService.getUserById(id);
-		user.setAdmin(admin);
-		userService.updateUser(user);
+		// ¼ö¾÷
+		userService.setUserById(id, admin);
 		model.addAttribute("page",page);
 		
 		return "redirect:/admin/user";
@@ -142,11 +139,12 @@ public class AdminController {
 			page =1;
 		
 		model.addAttribute("page",page);
+		boardService.deleteBoardReal(number);
 		
-		if(number != null) {
+		/*if(number != null) {
 			board = boardService.getBoard(number);
 			boardService.deleteBoardReal(board);
-		}
+		}*/
 		
 		return "redirect:/admin/board";
 	}
