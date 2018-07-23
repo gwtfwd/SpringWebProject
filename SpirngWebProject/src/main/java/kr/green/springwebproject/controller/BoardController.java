@@ -39,8 +39,6 @@ import kr.green.springwebproject.utils.UploadFileUtils;
 
 @RequestMapping(value="/board/*")
 
-
-
 public class BoardController {
 	
 	
@@ -80,6 +78,7 @@ public class BoardController {
 		model.addAttribute("type", type);
 		
 		
+		
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 			
@@ -117,12 +116,12 @@ public class BoardController {
 		
 		model.addAttribute("isAuthor",isAuthor);
 		
-		// ÆÄÀÏ¸í ¼öÁ¤ÇÏ´Â °úÁ¤
+		// å ì™ì˜™å ì‹¹ëªŒì˜™ å ì™ì˜™å ì™ì˜™å ì‹¹ëŒì˜™ å ì™ì˜™å ì™ì˜™
 		String filepath = board.getFilepath();
 		
 		if(filepath != null) {
 			
-		// /³â/¿ù/ÀÏ/uuid_ÆÄÀÏ¸í - > _ ´ÙÀ½¿¡ ³ª¿À´Â ±ÛÀÚ¸¦ Àß¶ó¼­ °¡Á®¿È
+		// /å ì™ì˜™/å ì™ì˜™/å ì™ì˜™/uuid_å ì™ì˜™å ì‹¹ëªŒì˜™ - > _ å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ìŒ˜ëªŒì˜™ å ìŒ©ë°ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™
 		String fileName = filepath.substring(filepath.indexOf("_")+1);
 		model.addAttribute("fileName",fileName);
 		
@@ -139,19 +138,19 @@ public class BoardController {
 		
 		if(del != null && del == 1) {
 			
-			// dbºÒ·¯¿Â °Ô½ÃÆÇÀÇ Á¤º¸¿¡¼­ 
+			// dbå ìŒ€ë¤„ì˜™å ì™ì˜™ å ìŒ‰ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™å ì™ì˜™ 
 			board.setFilepath(null);
 		}
 		
 		model.addAttribute("board", board);
 		
 		
-		// ÆÄÀÏ¸í ¼öÁ¤ÇÏ´Â °úÁ¤
+		// å ì™ì˜™å ì‹¹ëªŒì˜™ å ì™ì˜™å ì™ì˜™å ì‹¹ëŒì˜™ å ì™ì˜™å ì™ì˜™
 		String filepath = board.getFilepath();
 		
 		if(filepath != null) {
 			
-		// /³â/¿ù/ÀÏ/uuid_ÆÄÀÏ¸í - > _ ´ÙÀ½¿¡ ³ª¿À´Â ±ÛÀÚ¸¦ Àß¶ó¼­ °¡Á®¿È
+		// /å ì™ì˜™/å ì™ì˜™/å ì™ì˜™/uuid_å ì™ì˜™å ì‹¹ëªŒì˜™ - > _ å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ìŒ˜ëªŒì˜™ å ìŒ©ë°ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™
 		String fileName = filepath.substring(filepath.indexOf("_")+1);
 		model.addAttribute("fileName",fileName);
 		
@@ -161,7 +160,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="modify", method= RequestMethod.POST)
-	public String boardDetailPost(Model model, HttpServletRequest request, Board board, MultipartFile file, Integer del) throws Exception {
+	public String boardDetailPost(Board board, MultipartFile file, Integer del) throws Exception {
 		
 		boardService.modifyBoard(board, file, uploadPath, del);
 		
@@ -186,10 +185,10 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	/* ¼­¹ö¿¡ ÀúÀå */
+	/* å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™ */
 	private String uploadFile(String name, byte[] data) throws Exception{
 
-	    /* °íÀ¯ÇÑ ÆÄÀÏ¸íÀ» À§ÇØ UUID¸¦ ÀÌ¿ë */
+	    /* å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì‹¹ëªŒì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™ UUIDå ì™ì˜™ å ì‹±ìš¸ì˜™ */
 		UUID uid = UUID.randomUUID();
 		String savaName = uid.toString() + "_" + name;
 		File target = new File(uploadPath, savaName);
@@ -207,13 +206,13 @@ public class BoardController {
 	    try{
 	        String FormatName = fileName.substring(fileName.lastIndexOf(".")+1);
 	        
-	        // È®ÀåÁö¸¦ ÅëÇØ ¹Ìµğ¾î Å¸ÀÔ Á¤º¸¸¦ °¡Á®¿È
+	        // í™•å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™ å ì‹±ë“¸ì˜™å ï¿½ íƒ€å ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™
 	        MediaType mType = MediaUtils.getMediaType(FormatName);
 	        
 	        HttpHeaders headers = new HttpHeaders();
 	        in = new FileInputStream(uploadPath+fileName);
 	        
-	        // ÀÌ¹ÌÁöÀÌ¸é
+	        // å ì‹±ë±„ì˜™å ì™ì˜™å ì‹±ëªŒì˜™
 	        if(mType != null) {
 	        	headers.setContentType(mType);
 	        }
@@ -235,8 +234,8 @@ public class BoardController {
 	    return entity;
 	}
 	
-	// ½æ³×ÀÏÀ» °¡Á®¿À±â À§ÇØ ¼­¹ö¿¡ ÀÏ´Ü ÆÄÀÏÀ» ¾÷·ÎµåÇÏ¿© ½æ³×ÀÏÀ» »ı¼º
-	// (UploadFrilUtils.uploadFile)ÇÏ°í »ı¼ºµÈ ½æ³×ÀÏÀÇ °æ·Î ¹× ÀÌ¸§À» °¡Á®¿È
+	// å ì™ì˜™å ì™ì˜™å ì™ì˜™å ï¿½ å ì™ì˜™å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì‹¹ëŒì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì‹¸ë“¸ì˜™å ì‹¹ìš¸ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™å ï¿½ å ì™ì˜™å ì™ì˜™
+	// (UploadFrilUtils.uploadFile)å ì‹¹ê³¤ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™å ï¿½ å ì™ì˜™å ï¿½ å ì™ì˜™ å ì‹±ëªŒì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™
 	@ResponseBody
 	@RequestMapping("/display")
 	public ResponseEntity<String> downloadFile(MultipartFile file)throws Exception{

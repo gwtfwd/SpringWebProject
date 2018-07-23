@@ -1,6 +1,9 @@
 package kr.green.springwebproject.controller;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,6 +17,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -46,6 +50,7 @@ public class HomeController {
 		return "home";
 	}
 	
+	// ë¡œê·¸ì¸
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public String homePost(HttpServletRequest request, Model model) {
 		
@@ -56,7 +61,7 @@ public class HomeController {
 		
 		if( (user = userService.login(id, pw)) != null ) {
 			
-			// LoginInterceptor¿¡°Ô º¸³¾ À¯Àú Á¤º¸
+			// LoginInterceptorå ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™
 			model.addAttribute("user",user);
 			
 			return "redirect:/board/list";
@@ -77,7 +82,7 @@ public class HomeController {
 		
 	     if( !userService.join(user)) {
 	    	 
-	        return "redirect:/signup";
+	        return "redirect:/member/join";
 	     }
 	     else {
 	    	 
@@ -113,7 +118,7 @@ public class HomeController {
 		User nowUser = (User)session.getAttribute("user");
 		user = userService.update(nowUser, user);
 		
-		// userÀÇ Á¤º¸¸¦ ÀÌ¿ëÇØ¼­ UserMapper¿¡ ÀÖ´Â update¸Ş¼Òµå¸¦ È£ÃâÇÏ¿© DBÀÇ Á¤º¸¸¦ ¼öÁ¤
+		// userå ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì‹±ìš¸ì˜™å ìŒ”ì‡½ì˜™ UserMapperå ì™ì˜™ å ìŒëŒì˜™ updateå ìŒ¨ì†Œë“œë¥¼ í˜¸å ì™ì˜™å ì‹¹ìš¸ì˜™ DBå ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™
 		session.removeAttribute("user");
 		session.setAttribute("user", user);
 		
@@ -127,23 +132,23 @@ public class HomeController {
 	    return "mail";
 	}  
 
-	// mailSending ÄÚµå
+	// mailSending å ìŒ˜ë“¸ì˜™
 	@RequestMapping(value = "/mail/mailSending")
 	public String mailSending(HttpServletRequest request) {
 
 	    String setfrom = "gwtfwd@gmail.com";         
-	    String tomail  = request.getParameter("tomail");     // ¹Ş´Â »ç¶÷ ÀÌ¸ŞÀÏ
-	    String title   = request.getParameter("title");      // Á¦¸ñ
-	    String content = request.getParameter("content");    // ³»¿ë
+	    String tomail  = request.getParameter("tomail");     // å ìŒ¨ëŒì˜™ å ì™ì˜™å ï¿½ å ì‹±ëªŒì˜™å ì™ì˜™
+	    String title   = request.getParameter("title");      // å ì™ì˜™å ì™ì˜™
+	    String content = request.getParameter("content");    // å ì™ì˜™å ì™ì˜™
 
 	    try {
 	        MimeMessage message = mailSender.createMimeMessage();
 	        MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
 
-	        messageHelper.setFrom(setfrom);  // º¸³»´Â»ç¶÷ »ı·«ÇÏ°Å³ª ÇÏ¸é Á¤»óÀÛµ¿À» ¾ÈÇÔ
-	        messageHelper.setTo(tomail);     // ¹Ş´Â»ç¶÷ ÀÌ¸ŞÀÏ
-	        messageHelper.setSubject(title); // ¸ŞÀÏÁ¦¸ñÀº »ı·«ÀÌ °¡´ÉÇÏ´Ù
-	        messageHelper.setText(content);  // ¸ŞÀÏ ³»¿ë
+	        messageHelper.setFrom(setfrom);  // å ì™ì˜™å ì™ì˜™å ìŠ¹ì‚¼ì˜™å ï¿½ å ì™ì˜™å ì™ì˜™å ì‹¹ê±°ë†‚ì˜™ å ì‹¹ëªŒì˜™ å ì™ì˜™å ì™ì˜™å ìŒœë“¸ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™
+	        messageHelper.setTo(tomail);     // å ìŒ¨ëŠ”ì‚¼ì˜™å ï¿½ å ì‹±ëªŒì˜™å ì™ì˜™
+	        messageHelper.setSubject(title); // å ì™ì˜™å ì™ì˜™å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì‹¹ëŒì˜™
+	        messageHelper.setText(content);  // å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™
 
 	        mailSender.send(message);
 	        
@@ -180,6 +185,23 @@ public class HomeController {
 		return new ResponseEntity<String>(file.getOriginalFilename(), HttpStatus.OK);
 	}
 	
+	// ì•„ì´ë””ì¤‘ë³µí™•ì¸
+	@RequestMapping("/member/dup")
+	@ResponseBody
+	public Map<Object, Object> idcheck(@RequestBody String id){
+		
+	    int count = 0;
+	    Map<Object, Object> map = new HashMap<Object, Object>();
+	    
+	    if(userService.checkUser(id)) {
+	        count = 1;
+	    }
+	    
+	    map.put("cnt", count);
+	    System.out.println(id);
+	    
+	    return map;
+	}
 	
 	
 }

@@ -11,6 +11,9 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 	<title>JOIN</title>
+	
+	<base href="http://localhost:8282/">
+	
 </head>
 <body>
 <h1>
@@ -22,6 +25,7 @@
 			<div style="color:red; display:none;" id="inforId">
 				아이디는 영문자와 숫자로 이루어져 있으며, 5~10자 이어야 합니다.
 			</div>
+			<button id="dup">중복확인</button>
 		<label>PW : </label><input type="password" id="pwd" name="pw" onchange="validationPw(this)"/><br>
 			<div style="color:red; display:none;" id="inforPw">
 				비밀번호는 영문자와 숫자가 1개이상 포함되어 있어야 하며, 8~20자 이어야 합니다.
@@ -32,6 +36,28 @@
 	</form>
 
 	<script >
+	
+	$("#dup").on("click",function(){
+		var id = $("#usr").val();			/* id가 id인 input 태그에 입력된 id 가져오기 */
+		$.ajax({
+			async:true,
+			type:'POST',
+			data:id,
+			url:"member/dup",
+			dataType:"json",
+			contentType:"application/json; charset=UTF-8",
+			success : function(data){
+				if(data.cnt > 0){
+					alert("입력하신 아이디는 이미 존재합니다.");
+				}else{
+					alert("입력하신 아이디는 사용 가능합니다.");
+				}
+			}
+		});
+	});
+	
+	
+	
 		function validationId(id){
 			
 			var inforId = document.getElementById('inforId');

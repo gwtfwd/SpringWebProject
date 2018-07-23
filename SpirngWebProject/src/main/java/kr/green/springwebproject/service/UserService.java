@@ -45,6 +45,8 @@ public class UserService {
 		
 	}
 
+	
+	
 	public User login(String id, String pw) {
 		
 		User user = userMapper.loginById(id);
@@ -57,6 +59,8 @@ public class UserService {
 			return null;
 		
 	}
+	
+	
 	
 	public User update(User nowUser, User newUser) {
 		
@@ -157,13 +161,16 @@ public class UserService {
 	}
 	
 	
-	/*public boolean updateUser(User user) {
+	public boolean checkUser(String id) {
 		
-		userMapper.updateUser(user);
+		User user = userMapper.loginById(id);
 		
-		return true;
-	}*/
-	
+		if( user != null ) {
+			return true;
+		}
+		
+		return false;
+	}
 	
 	
 	
